@@ -11,6 +11,7 @@ int main(){
 	int ch;
 	int height, width, y;
 	initscr();
+	noecho();
 
 	refresh();
 	
@@ -21,7 +22,6 @@ int main(){
 	wcenter(stdscr, y, "ABOB");
 	
 	refresh();
-	noecho();
 
 	start_color();
 	init_pair(1, COLOR_WHITE, COLOR_BLACK);
@@ -32,15 +32,7 @@ int main(){
 
 	}while(true);
 
-
-	//char cmd[256];
-
-	//mvaddstr(height-1, 0, "Command: ");
-	//getnstr(cmd, 255);
 	
-	//clear();
-
-
 	refresh();
 	getch();
 	endwin();
@@ -89,12 +81,15 @@ void open_prompt(){
 	waddstr(prompt, ":");
 
         touchwin(prompt);
-
 	wrefresh(prompt);
-	getch();
+	
+	echo();
+	char cmd[256];
+	wgetnstr(prompt, cmd, 256);
+
         touchwin(stdscr);
 	refresh();
-
+	noecho();
 }
 void wcenter(WINDOW *win, int row, char *title){
 	int len, indent, y, width;
