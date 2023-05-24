@@ -1,13 +1,18 @@
 #include <ncurses.h>
+#include <stdlib.h>
 #include <string.h>
 
 void wcenter(WINDOW *win, int row, char *title);
 void open_start();
 void open_prompt();
 void open_website();
+void set_local_clipboard(char *str);
+char *get_local_clipboard();
+
 
 WINDOW *start, *prompt, *website;
-
+char *url;
+char *local_clipboard;
 
 int main(){
 	int ch;
@@ -29,6 +34,11 @@ int main(){
 		ch = getch();
 		refresh();
 		if(ch == ':') open_prompt();
+		else if(ch == 'y'){
+			clear();
+			printw("Your clipboard is %s", get_local_clipboard());
+			refresh();
+		}	
 
 	}while(true);
 
@@ -59,7 +69,6 @@ void open_start(){
 	wcenter(start, y,   "type :o<enter> to open a website\n");
 
         touchwin(start);
-
 	wrefresh(start);
 	getch();
         touchwin(stdscr);
@@ -84,43 +93,20 @@ void open_prompt(){
 	echo();
 	char all[256];
 	wgetnstr(prompt, all, 256);
-	//wscanw(prompt, "%s", cmd);
-	//char content[256];
-	//wscanw(prompt, "d%s", content);
-	//content = strtok(str, " ");
-	//addstr(cmd);
-	//addstr(content);
 	char *content = strchr(all, ' ') + 1;
 	char *cmd = strtok(all, " ");
-	//addstr(cmd);
-	//addstr("\n");
-	//addstr(content);
-
 	if(strcmp(cmd, "o") == 0){
 		clear();
 		printw("You have opened %s", content);
+		url = content;
+		set_local_clipboard(url);
 		refresh();
-	}else{
-		addch(cmd[1]);
-	}
-	/*
-	if(after == ""){
-		addch('w');
-	}else{
-		addch('t');
-	}
-	*/
-	/*
-	switch (before) {
-		case "o":
-			touchwin(stdscr);	
-			refresh();
-			break;
-		default:
-			break;
-	}
-	*/
-        touchwin(stdscr);
+	}else if(strcmp(cmd, "q") == 0){
+		exit(0);
+	}else if(strcmp(cmd, "y") == 0){
+			}
+	touchwin(stdscr);
+
 	refresh();
 	noecho();
 }
@@ -134,3 +120,19 @@ void wcenter(WINDOW *win, int row, char *title){
 	mvwaddstr(win, row, indent, title);
 	wrefresh(win);
 }
+
+
+
+void set_local_clipboard(char *str) {
+	if (local_clipboard != NULL) {
+		free(local_clipboard);
+	}
+	local_clipboard = (char *)malloc(strlen(str) + 1);
+	strcpy(local_clipboard, str);
+}
+
+char *get_local_clipboard() {
+	return local_clipboard;
+}
+
+
