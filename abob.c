@@ -8,14 +8,17 @@ WINDOW *start, *prompt;
 
 int main(){
 	int ch;
+	int height, width, y;
 	initscr();
 
 	refresh();
 	
 	open_start();
 	
-	addstr("abob");
-
+	getmaxyx(start, height, width);
+	y = height >> 1;
+	wcenter(stdscr, y, "ABOB");
+	
 	//char cmd[256];
 
 	//mvaddstr(height-1, 0, "Command: ");
@@ -45,7 +48,7 @@ void open_start(){
 	//printw("%d cols, %d rows", height, width);
 
 	wcenter(start, y-4, "Welcome to abob");
-	wcenter(start, y-3, "ABOB - A Better Open Browser");
+	wcenter(start, y-3, "ABOB - Another Buggy, Open Browser");
 	wcenter(start, y-2, "");
 	wcenter(start, y-1, "version 0.0.0.3");
 	wcenter(start, y,   "type :o<enter> to open a website\n");
