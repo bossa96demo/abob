@@ -44,10 +44,10 @@ void open_start(){
 	y = height >> 1;
 	//printw("%d cols, %d rows", height, width);
 
-	wcenter(start, y-4, "Welcome to abobr\n");
-	wcenter(start, y-3, "ABOBR - A Better Open BRowser\n");
-	wcenter(start, y-2, "\n");
-	wcenter(start, y-1, "version 0.0.0.3\n");
+	wcenter(start, y-4, "Welcome to abob");
+	wcenter(start, y-3, "ABOB - A Better Open Browser");
+	wcenter(start, y-2, "");
+	wcenter(start, y-1, "version 0.0.0.3");
 	wcenter(start, y,   "type :o<enter> to open a website\n");
 
         touchwin(start);
