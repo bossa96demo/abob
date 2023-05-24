@@ -4,8 +4,10 @@
 void wcenter(WINDOW *win, int row, char *title);
 void open_start();
 void open_prompt();
+void open_website();
 
-WINDOW *start, *prompt;
+WINDOW *start, *prompt, *website;
+
 
 int main(){
 	int ch;
@@ -25,6 +27,7 @@ int main(){
 
 	start_color();
 	init_pair(1, COLOR_WHITE, COLOR_BLACK);
+	init_pair(2, COLOR_BLUE, COLOR_RED);
 	do{
 		ch = getch();
 		refresh();
@@ -85,8 +88,35 @@ void open_prompt(){
 	
 	echo();
 	char cmd[256];
-	wgetnstr(prompt, cmd, 256);
-
+	//wgetnstr(prompt, cmd, 256);
+	wscanw(prompt, "%s", cmd);
+	char content[256];
+	wscanw(prompt, "%s", content);
+	addstr(cmd);
+	addstr(content);
+	
+	if(cmd == "o"){
+		addch('f');
+	}else{
+		addch('k');
+	}
+	/*
+	if(after == ""){
+		addch('w');
+	}else{
+		addch('t');
+	}
+	*/
+	/*
+	switch (before) {
+		case "o":
+			touchwin(stdscr);	
+			refresh();
+			break;
+		default:
+			break;
+	}
+	*/
         touchwin(stdscr);
 	refresh();
 	noecho();
