@@ -25,9 +25,6 @@ int main(){
 	
 	refresh();
 
-	start_color();
-	init_pair(1, COLOR_WHITE, COLOR_BLACK);
-	init_pair(2, COLOR_BLUE, COLOR_RED);
 	do{
 		ch = getch();
 		refresh();
@@ -70,7 +67,7 @@ void open_start(){
 
 }
 void open_prompt(){
-	int height, width, y;
+	int height, width;
 	getmaxyx(stdscr, height, width);
 
 	if((prompt = newwin(1, 0, height - 1, 0)) == NULL){
@@ -79,26 +76,32 @@ void open_prompt(){
 		return;
 	}
 
-	wbkgd(prompt, COLOR_PAIR(1));
-
 	waddstr(prompt, ":");
 
         touchwin(prompt);
 	wrefresh(prompt);
 	
 	echo();
-	char cmd[256];
-	//wgetnstr(prompt, cmd, 256);
-	wscanw(prompt, "%s", cmd);
-	char content[256];
-	wscanw(prompt, "%s", content);
-	addstr(cmd);
-	addstr(content);
-	
-	if(cmd == "o"){
-		addch('f');
+	char all[256];
+	wgetnstr(prompt, all, 256);
+	//wscanw(prompt, "%s", cmd);
+	//char content[256];
+	//wscanw(prompt, "d%s", content);
+	//content = strtok(str, " ");
+	//addstr(cmd);
+	//addstr(content);
+	char *content = strchr(all, ' ') + 1;
+	char *cmd = strtok(all, " ");
+	//addstr(cmd);
+	//addstr("\n");
+	//addstr(content);
+
+	if(strcmp(cmd, "o") == 0){
+		clear();
+		printw("You have opened %s", content);
+		refresh();
 	}else{
-		addch('k');
+		addch(cmd[1]);
 	}
 	/*
 	if(after == ""){
