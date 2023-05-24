@@ -65,7 +65,7 @@ void open_start(){
 	wcenter(start, y-4, "Welcome to abob");
 	wcenter(start, y-3, "ABOB - Another Buggy, Open Browser");
 	wcenter(start, y-2, "");
-	wcenter(start, y-1, "version 0.0.0.4");
+	wcenter(start, y-1, "version 0.0.0.5");
 	wcenter(start, y,   "type :o<enter> to open a website\n");
 
         touchwin(start);
