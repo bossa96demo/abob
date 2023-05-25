@@ -2,7 +2,7 @@
 #include <curl/curl.h>
 
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata) {
-  size_t written = fwrite(ptr, size, nmemb, (FILE *)userdata);
+  size_t written = sprintf(ptr, size, nmemb, (FILE *)userdata);
   return written;
 }
 
