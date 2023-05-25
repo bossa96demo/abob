@@ -3,20 +3,22 @@
 #include <string.h>
 #include "abob.h"
 
+char *get_thing_after_space(char *text);
+
 int main(){
 	int ch;
 	initscr();
-	noecho(); // turning off echoing input
-
+	noecho(); 	// turning off echoing input
+	curs_set(0);
 	refresh();
-	open_start(); // opening welcome page
+	open_start();	// opening welcome page
 
 	do{					/* processing input */
 		ch = getch();
 		touchwin(stdscr);
 		refresh();
 		if(ch == ':') open_prompt();	/* if user enters command mode */
-		else if(ch == 'y'){		/* if user yanks */
+		else if(ch == 'y'){		/* if user yanks we copy the url*/
 			clear();
 			printw("Your clipboard is %s", get_url());
 			refresh();
@@ -30,10 +32,6 @@ int main(){
 	endwin();				/* nothing will go here */
 	return 0;
 }
-
-
-
-
 
 void open_website(char *site){
 	noecho();
@@ -82,6 +80,7 @@ void open_prompt(){
 		endwin();
 		return;
 	}
+	curs_set(1);	// turning cursor on while in prompt mode
 
 	waddstr(prompt, ":");
 
@@ -94,19 +93,28 @@ void open_prompt(){
 	
 
 	// if user doesn't enter anything programm will crash
-	if(strlen(all) == 0) { noecho(); return; } /* check if so, emergency exit */
+	if(strlen(all) == 0) 
+	{ curs_set(0); noecho(); return; } /* check if so, emergency exit */
+
+	char *content = get_thing_after_space(all);	// get what goes after command
+	char *cmd = strtok(all, " ");			// get command that user inputed
 	
-	char *content = strchr(all, ' ') + 1;	// get what goes after command
-	char *cmd = strtok(all, " ");		// get command that user inputed
-	
+	//addstr(cmd);
+	//addstr(content);
+
 	if(strcmp(cmd, "o") == 0 && content[0] != '\0'){// open website on command 'o'
 		open_website(content);
-	}else if(strcmp(cmd, "q") == 0){	// on q we quit the programm
+	}else if(strcmp(cmd, "q") == 0){		// on q we quit the programm
 		exit(0);
-	}else if(strcmp(cmd, "help") == 0){	// display start page on help
+	}else if(strcmp(cmd, "help") == 0){		// display start page on help
 		open_start();
+	}else{
+		wclear(prompt);
+		waddstr(prompt, "command not found");
+		wrefresh(prompt);
 	}
-	
+
+	curs_set(0);	// turning off cursor
 	noecho();	// turn off echo 
 }
 void wcenter(WINDOW *win, int row, char *title){
@@ -132,4 +140,13 @@ char *get_url() { //simply return url
 	return url;
 }
 
-
+char *get_thing_after_space(char *text){
+	char* space_ptr = strstr(text, " ");
+	if(space_ptr == NULL) return "";
+	char* after_space_ptr = space_ptr + 1;
+	int remaining_len = strlen(after_space_ptr);
+	char* substr = malloc((remaining_len + 1) * sizeof(char));
+	strcpy(substr, after_space_ptr);
+	return substr;
+	free(substr);
+}
