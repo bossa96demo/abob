@@ -6,9 +6,6 @@ void set_url(char *str) { // we set url for later use, such as copying and savin
 	strcpy(url, str);			// copy given string in url
 }
 
-
-
-
-char *get_url() { //simply return url
+char *get_url() { 	//simply return url
 	return url;
 }

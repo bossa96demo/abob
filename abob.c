@@ -1,12 +1,12 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
-#include "abob.h"
-#include "request.c"
-#include "html.c"
-#include "manage_url.c"
-#include "display_start_page.c"
-#include "open_prompt.c"
+#include "abob.h"				// move garbage to another file
+#include "request.c"				// requesting html and validating urls
+#include "html.c"				// only max is able to understand this
+#include "manage_url.c"				// tools to work with current url
+#include "start_page.c"				// basic welcome page
+#include "prompt_mode.c"			// working with prompt
 
 int main(){
 	int ch;
@@ -84,7 +84,7 @@ void wcenter(WINDOW *win, int row, char *title){
 	wrefresh(win);				// and refresh given window
 }
 
-	
+
 char *get_thing_after_space(char *text){
 	char* space_ptr = strstr(text, " ");
 	if(space_ptr == NULL) return "";

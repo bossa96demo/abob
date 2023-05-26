@@ -4,10 +4,7 @@
 #include <curl/curl.h>
 #include <regex.h>
 
-//^(https?://)?([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}(:[0-9]{1,5})?(/.*)?$
-
 char* url_pattern = "^(https?://)?([a-z0-9_]+(-[a-z0-9]+)*\\.)+[a-z]{2,}(:[0-9]{1,5})?(/.*)?$"; 
-//"^(https?://)?[:alnum:]+(\\.[:alnum:]+)*(/[:alnum:]+)*$";
 /* 
  * ^ - start of string
  * a* - match 0 or more 'a'
@@ -39,26 +36,16 @@ int validate_url(char *url){
         return 0;
     }
     reti = regexec(&regex, url, 0, NULL, 0);
-    if (!reti) {
-        // Free the memory used by the regular expression
-        regfree(&regex);
-        return 1;
-    } else {
-        // Free the memory used by the regular expression
-        regfree(&regex);
-        return 0;
-    }
-
-
+    // Free the memory used by the regular expression
+    regfree(&regex);
+    return !reti;
 }
 
-char buffer[2048 * 2048];
+char buffer[2048 * 2048];	// Allocate a buffer to store the received data
 
 char *request(char *url) {
     CURL *curl;
     CURLcode res;
-    //char buffer[1024 * 1024]; // Allocate a buffer to store the received data
-
     curl = curl_easy_init();
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_URL, url);
