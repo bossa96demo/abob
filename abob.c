@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "abob.h"
+#include "request.c"
+#include "html.c"
 
 char *get_thing_after_space(char *text);
 
@@ -22,7 +24,8 @@ int main(){
 			clear();
 			printw("Your clipboard is %s", get_url());
 			refresh();
-		}else{				/* else printing abob */
+		}
+		else{				
 			clear();
 			addstr("ABOB");
 			refresh();
@@ -31,6 +34,16 @@ int main(){
 
 	endwin();				/* nothing will go here */
 	return 0;
+}
+
+void tag_callback(char *tagname){
+	printf("%s", tagname); 
+}
+
+void render_website(char *url){
+	printf("rendering %s", url);
+	char *html = request(url);
+	parse(html, *tag_callback);
 }
 
 void open_website(char *site){
@@ -44,11 +57,21 @@ void open_website(char *site){
 	}
 
 	refresh();
-        wprintw(website, "You have opened %s", site);
+	int validity = validate_url(site);
+	if (validity){
+		wprintw(website, "Opening %s...", site);
+		wrefresh(website);
+		render_website(site);
+	}
+	else{
+		wprintw(website, "Error: Url %s is not valid!", site);
+	}
 
 	touchwin(website);
 	wrefresh(website);
 }
+
+
 void open_start(){
 	int height, width, y;
 
