@@ -4,7 +4,23 @@
 #include <curl/curl.h>
 #include <regex.h>
 
-char* url_pattern = "^https?://[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*(/[a-zA-Z0-9]+)*$";
+//^(https?://)?([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}(:[0-9]{1,5})?(/.*)?$
+
+char* url_pattern = "^(https?://)?([a-z0-9_]+(-[a-z0-9]+)*\\.)+[a-z]{2,}(:[0-9]{1,5})?(/.*)?$"; 
+//"^(https?://)?[:alnum:]+(\\.[:alnum:]+)*(/[:alnum:]+)*$";
+/* 
+ * ^ - start of string
+ * a* - match 0 or more 'a'
+ * a? - match 0 or 1 'a'
+ * a+ - match 1 or more 'a'
+ * [:alnum:] - a-zA-Z0-9 
+ * \ - escape special characters that have a special meaning in regex, such as the dot
+ * a{y,x} - a repeated from y to x times
+ * a{2,} - a repeated 2 or more times
+ * a{,2} - a repeated 2 or less times
+ * . - a metacharacter that matches any single character except for '\n'
+ * $ - end of a string
+*/
 
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata) {
     // Write the received data to a buffer
@@ -58,4 +74,3 @@ char *request(char *url) {
 
     return buffer;
 }
-

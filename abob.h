@@ -6,8 +6,11 @@ void wcenter(WINDOW *win, int row, char *title);// to center text in given windo
 void open_start();				// to open start window
 void open_prompt();				// to open prompt
 void open_website();				//
+char *get_thing_after_space(char *text);	// you give string, you get thing after space
 void set_url(char *str);			// set url to given string
 char *get_url();				// get url
+
+
 
 WINDOW *start, *prompt, *website;		// create start and prompt windows
 char *url;
