@@ -20,16 +20,23 @@ int main(){
 		ch = getch();
 		touchwin(stdscr);
 		refresh();
-		if(ch == ':') open_prompt();	/* if user enters command mode */
-		else if(ch == 'y'){		/* if user yanks we copy the url*/
-			clear();
-			printw("Your clipboard is %s", get_url());
-			refresh();
-		}
-		else{				
-			clear();
-			addstr("ABOB");
-			refresh();
+		switch(ch){
+			case ':':
+				open_prompt();
+				break;
+			case 'y':
+				clear();
+				printw("Your clipboard is %s", get_url());
+				refresh();
+				break;
+			case 'i':
+				open_insert();
+				break;
+			default:
+				//clear(); 
+				//addstr("ABOB");
+				//refresh();
+				break;
 		}
 	}while(true);
 
@@ -37,12 +44,40 @@ int main(){
 	return 0;
 }
 
+void open_insert(){
+	int ch, height, width;
+	getmaxyx(stdscr, height, width);
+	ins = newwin(0, 0, 0, 0);
+	if(ins == NULL){
+		addstr("Error while allocating memory");
+		endwin();
+		return;
+	}
+	curs_set(1);
+	wrefresh(ins);
+	for (;;) {
+		ch = getch();
+		waddch(ins, ch);
+		switch(ch){
+			case 27: // escape button
+				clear(); refresh(); 
+				return; break;
+			default:
+				break;
+		}
+		wrefresh(ins);
+	}
+	clear();
+       	refresh();
+	curs_set(0);
+}
+
 void tag_callback(char *tagname){
 	printf("%s", tagname); 
 }
 
 void render_website(char *url){
-	printf("rendering %s", url);
+	printw("rendering %s", url);
 	char *html = request(url);
 	parse(html, *tag_callback);
 }
@@ -56,7 +91,6 @@ void open_website(char *site){
 		endwin();
 		return;
 	}
-
 	refresh();
 	int validity = validate_url(site);
 	if (validity){

@@ -1,8 +1,10 @@
+void show_error(char *err_text);
+
 void open_prompt(){
 	int height, width;
 	getmaxyx(stdscr, height, width);
-
-	if((prompt = newwin(1, 0, height - 1, 0)) == NULL){
+	prompt = newwin(1, 0, height - 1, 0);
+	if(prompt == NULL){
 		addstr("Error while allocating memory");
 		endwin();
 		return;
@@ -29,18 +31,24 @@ void open_prompt(){
 	//addstr(cmd);
 	//addstr(content);
 
-	if(strcmp(cmd, "o") == 0 && content[0] != '\0'){// open website on command 'o'
-		open_website(content);
+	if(strcmp(cmd, "o") == 0){			// open website on command 'o'
+		if(content[0] == '\0') // if user doesn't open anything show error
+			show_error("Error! Nothing to open");
+		else
+			open_website(content);
 	}else if(strcmp(cmd, "q") == 0){		// on q we quit the programm
 		exit(0);
 	}else if(strcmp(cmd, "help") == 0){		// display start page on help
 		display_start_page();
 	}else{
-		wclear(prompt);
-		waddstr(prompt, "command not found");
-		wrefresh(prompt);
+		show_error("Error! Command not found");
 	}
 
 	curs_set(0);	// turning off cursor
 	noecho();	// turn off echo 
+}
+void show_error(char *err_text){
+	wclear(prompt);
+	waddstr(prompt, err_text);
+	wrefresh(prompt);
 }

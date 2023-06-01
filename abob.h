@@ -9,7 +9,8 @@ void open_website();				// to open website
 char *get_thing_after_space(char *text);	// you give string, you get thing after space
 void set_url(char *str);			// set url to given string
 char *get_url();				// get url
+void open_insert(void);
 
 
-WINDOW *start, *prompt, *website;		// create start, prompt and website windows
+WINDOW *start, *prompt, *website, *ins;		// create start, prompt and website windows
 char *url;
