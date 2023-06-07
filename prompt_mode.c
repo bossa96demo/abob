@@ -1,3 +1,8 @@
+/*
+ *
+ * Opening prompt and getting user commands
+ *
+ */
 void show_error(char *err_text);
 
 void open_prompt(){

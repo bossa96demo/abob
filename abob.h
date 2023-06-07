@@ -10,7 +10,13 @@ char *get_thing_after_space(char *text);	// you give string, you get thing after
 void set_url(char *str);			// set url to given string
 char *get_url();				// get url
 void open_insert(void);
+void manage_tabs(void);
+void check_win(WINDOW *win);
 
 
-WINDOW *start, *prompt, *website, *ins;		// create start, prompt and website windows
+#define MAX_WEBSITES 42
+char websites[MAX_WEBSITES][100];		// array of websites
+int cur_web = 0;
+
+WINDOW *start, *prompt, *website, *ins, *t_bar;		// create start, prompt and website windows
 char *url;

@@ -20,6 +20,8 @@ int main(){
 		ch = getch();
 		touchwin(stdscr);
 		refresh();
+		touchwin(t_bar);
+		wrefresh(t_bar);
 		switch(ch){
 			case ':':
 				open_prompt();
@@ -32,10 +34,10 @@ int main(){
 			case 'i':
 				open_insert();
 				break;
+			case 't':
+				manage_tabs();
+				break;
 			default:
-				//clear(); 
-				//addstr("ABOB");
-				//refresh();
 				break;
 		}
 	}while(true);
@@ -84,21 +86,18 @@ void render_website(char *url){
 
 void open_website(char *site){
 	noecho();
-	clear();
-	set_url(site);
-	if((website = newwin(0, 0, 0, 0)) == NULL){
-		addstr("Error while allocating memory");
-		endwin();
-		return;
-	}
+	wclear(website);
+
+	website = newwin(0, 0, 1, 0);
+	check_win(website);
 	refresh();
 	int validity = validate_url(site);
 	if (validity){
+		set_url(site);
 		wprintw(website, "Opening %s...", site);
 		wrefresh(website);
 		render_website(site);
-	}
-	else{
+	}else{
 		wprintw(website, "Error: Url %s is not valid!", site);
 	}
 
@@ -106,26 +105,42 @@ void open_website(char *site){
 	wrefresh(website);
 }
 
+void manage_tabs(){
+	t_bar = newwin(1, 0, 0, 0);
+	check_win(t_bar);
+	for (int i = 0; i < cur_web; i++){
+	    wprintw(t_bar, "| %s ", websites[i]);
+	}
+	waddch(t_bar, '|');
+	wrefresh(t_bar);
+} 
 
 void wcenter(WINDOW *win, int row, char *title){
 	int len, indent, y, width;		
-       	getmaxyx(win, y, width);		// getting max x and y of given window
+       	getmaxyx(win, y, width);		/* get coords of window */
 
-	len = strlen(title);			// getting length on the given string
-	indent = width - len;			/* counting how much space */
-	indent /= 2;				/* will we need to retreat */
-	mvwaddstr(win, row, indent, title);	// finally print message
-	wrefresh(win);				// and refresh given window
+	len = strlen(title);			/* getting len of the given string */
+	indent = width - len;			/* counting how much space  */
+	indent /= 2;				/* will we need to retreat  */
+	mvwaddstr(win, row, indent, title);	/* finally print message    */
+	wrefresh(win);				/* and refresh given window */
 }
 
 
-char *get_thing_after_space(char *text){
-	char* space_ptr = strstr(text, " ");
-	if(space_ptr == NULL) return "";
+char *get_thing_after_space(char *text) {
+	char* space_ptr = strstr(text, " "); 	/* if it works, it works */ 
+	if(space_ptr == NULL) return ""; 	/* no matter at what cost */
 	char* after_space_ptr = space_ptr + 1;
 	int remaining_len = strlen(after_space_ptr);
 	char* substr = malloc((remaining_len + 1) * sizeof(char));
 	strcpy(substr, after_space_ptr);
 	return substr;
 	free(substr);
+}
+void check_win(WINDOW *win){
+	if(win == NULL){
+	    addstr("Error while allocating memory for window");
+	    endwin();
+	    return;
+	}	
 }
