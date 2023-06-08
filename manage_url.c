@@ -1,14 +1,16 @@
 void set_url(char *str) { /* we set url for later use */
-	//if (url != NULL) {			/* if url is occupied, delete it */
-	//	free(url);
-	//}
-	//url = (char *)malloc(strlen(str) + 1);	/* allocate space for url   */
-	//strcpy(url, str);			/* copy given string in url */
-	strcpy(websites[++cur], str);
-	wmax = wmax > cur ? wmax : cur;
+	strcpy(websites[++cur], str); 	/* add to array the name of site */
+	wmax = wmax > cur ? wmax : cur;	/* changing wmax if needed */
 }
+/*
+ * If we change	"strcpy(websites[++cur], str);" 
+ * for "cur++; strcpy(websites[cur], str);"
+ * it won't work
+ * i don't know why
+ */
 
-char *get_url() { 	/* simply return url */
-	if(cur < 0) return NULL;
-	return websites[cur];
+
+char *get_url(void) { 	/* simply return url */
+	if(cur < 0) return NULL; 	/* if no url-s yet, prevent errors */
+	return websites[cur];		/* else return url */
 }

@@ -9,6 +9,7 @@
 #include "prompt_mode.c"			// working with prompt
 
 void scroll_tabs(void);
+void upd_tbar(void);
 
 int main(){
 	int ch;
@@ -21,7 +22,7 @@ int main(){
 	do{					/* processing input */
 		ch = getch();
 		
-		/* tab bar */
+		upd_tbar();
 		manage_tabs();
 		touchwin(t_bar);
 		wrefresh(t_bar);
@@ -52,6 +53,7 @@ int main(){
 			default:
 				break;
 		}
+		upd_tbar();
 	}while(true);
 
 	endwin();				/* nothing will go here */
@@ -170,4 +172,9 @@ void check_win(WINDOW *win){
 	    endwin();
 	    return;
 	}	
+}
+void upd_tbar(){
+	manage_tabs();
+	touchwin(t_bar);
+	wrefresh(t_bar);
 }
