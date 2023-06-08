@@ -3,7 +3,8 @@
 ### It is being written with ncurses library in C
 ## Todo List
 - [ ] Choose a license
-- [ ] Lorem Ipsum
-- [ ] Dolor Sit Amet
+- [ ] Website overflow
+- [ ] Render websites
+- [ ] Add help page
 
 We are working on project together with @maxim3007

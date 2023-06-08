@@ -3,7 +3,7 @@ void set_url(char *str) { /* we set url for later use */
 	wmax = wmax > cur ? wmax : cur;	/* changing wmax if needed */
 }
 /*
- * If we change	"strcpy(websites[++cur], str);" 
+ * if we change	"strcpy(websites[++cur], str);" 
  * for "cur++; strcpy(websites[cur], str);"
  * it won't work
  * i don't know why
