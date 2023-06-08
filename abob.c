@@ -91,12 +91,10 @@ void render_website(char *url){
 }
 
 void open_website(char *site){
-	noecho();
 	wclear(web_wins[cur]);
 
 	web_wins[cur] = newwin(0, 0, 1, 0); /* everything but first line of screen */
 	check_win(web_wins[cur]);
-	refresh();
 	int validity = validate_url(site);
 	if (validity){
 		wprintw(web_wins[cur], "Opening %s...", site);
@@ -107,7 +105,6 @@ void open_website(char *site){
 		wprintw(web_wins[cur], "Error: Url %s is not valid!", site);
 		wrefresh(web_wins[cur]);
 	}
-
 }
 
 void manage_tabs(){
