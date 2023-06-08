@@ -18,10 +18,12 @@ int main(){
 
 	do{					/* processing input */
 		ch = getch();
-		touchwin(stdscr);
-		refresh();
+		
+		/* tab bar */
+		manage_tabs();
 		touchwin(t_bar);
 		wrefresh(t_bar);
+		
 		switch(ch){
 			case ':':
 				open_prompt();
@@ -37,6 +39,10 @@ int main(){
 			case 't':
 				manage_tabs();
 				break;
+			case 9: /* tab key */
+				clear();
+				addstr("ABOB");
+				refresh();
 			default:
 				break;
 		}
@@ -79,39 +85,39 @@ void tag_callback(char *tagname){
 }
 
 void render_website(char *url){
-	printw("rendering %s", url);
+	wprintw(web_wins[cur], "rendering %s", url);
 	char *html = request(url);
 	parse(html, *tag_callback);
 }
 
 void open_website(char *site){
 	noecho();
-	wclear(website);
+	wclear(web_wins[cur]);
 
-	website = newwin(0, 0, 1, 0);
-	check_win(website);
+	web_wins[cur] = newwin(0, 0, 1, 0); /* everything but first line of screen */
+	check_win(web_wins[cur]);
 	refresh();
 	int validity = validate_url(site);
 	if (validity){
-		set_url(site);
-		wprintw(website, "Opening %s...", site);
-		wrefresh(website);
+		wprintw(web_wins[cur], "Opening %s...", site);
+		wrefresh(web_wins[cur]);
 		render_website(site);
+		set_url(site);
 	}else{
-		wprintw(website, "Error: Url %s is not valid!", site);
+		wprintw(web_wins[cur], "Error: Url %s is not valid!", site);
+		wrefresh(web_wins[cur]);
 	}
 
-	touchwin(website);
-	wrefresh(website);
 }
 
 void manage_tabs(){
-	t_bar = newwin(1, 0, 0, 0);
+	t_bar = newwin(1, 0, 0, 0); /* first line of screen */
 	check_win(t_bar);
-	for (int i = 0; i < cur_web; i++){
+	int i;
+	for (i = 0; i <= cur; i++){
 	    wprintw(t_bar, "| %s ", websites[i]);
 	}
-	waddch(t_bar, '|');
+	i == 0 ? : waddch(t_bar, '|'); /* if no websites opened, do not print | */
 	wrefresh(t_bar);
 } 
 

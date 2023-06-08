@@ -16,7 +16,8 @@ void check_win(WINDOW *win);
 
 #define MAX_WEBSITES 42
 char websites[MAX_WEBSITES][100];		// array of websites
-int cur_web = 0;
+int cur = -1, wmax = 0;
 
-WINDOW *start, *prompt, *website, *ins, *t_bar;		// create start, prompt and website windows
+WINDOW *start, *prompt, *web_wins[MAX_WEBSITES], *ins, *t_bar;		
+/* create start, prompt, array of websites, insert and tab_bar windows */
 char *url;
