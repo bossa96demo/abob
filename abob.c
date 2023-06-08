@@ -8,6 +8,8 @@
 #include "start_page.c"				// basic welcome page
 #include "prompt_mode.c"			// working with prompt
 
+void scroll_tabs(void);
+
 int main(){
 	int ch;
 	initscr();
@@ -40,9 +42,13 @@ int main(){
 				manage_tabs();
 				break;
 			case 9: /* tab key */
-				clear();
-				addstr("ABOB");
-				refresh();
+				//clear();
+				scroll_tabs();
+				manage_tabs();
+				wcenter(stdscr, 5, websites[cur]);
+				//printw("%d %s", cur, websites[cur]);
+				//refresh();
+				break;
 			default:
 				break;
 		}
@@ -84,6 +90,14 @@ void tag_callback(char *tagname){
 	printf("%s", tagname); 
 }
 
+void scroll_tabs(void){
+	if(cur < wmax){
+	    cur++;
+	}else{
+	    cur = 0;
+	}
+}
+
 void render_website(char *url){
 	wprintw(web_wins[cur], "rendering %s", url);
 	char *html = request(url);
@@ -91,7 +105,6 @@ void render_website(char *url){
 }
 
 void open_website(char *site){
-	wclear(web_wins[cur]);
 
 	web_wins[cur] = newwin(0, 0, 1, 0); /* everything but first line of screen */
 	check_win(web_wins[cur]);
@@ -102,6 +115,7 @@ void open_website(char *site){
 		render_website(site);
 		set_url(site);
 	}else{
+		wclear(web_wins[cur]);
 		wprintw(web_wins[cur], "Error: Url %s is not valid!", site);
 		wrefresh(web_wins[cur]);
 	}
@@ -110,11 +124,21 @@ void open_website(char *site){
 void manage_tabs(){
 	t_bar = newwin(1, 0, 0, 0); /* first line of screen */
 	check_win(t_bar);
+	wclear(t_bar);
 	int i;
-	for (i = 0; i <= cur; i++){
-	    wprintw(t_bar, "| %s ", websites[i]);
+	for (i = 0; i <= wmax; i++){
+	    wprintw(t_bar, "| ");
+	    if(i == cur){
+		wattron(t_bar, A_STANDOUT);
+		wprintw(t_bar, "%s", websites[i]);
+		wattroff(t_bar, A_STANDOUT);
+		waddch(t_bar, ' ');
+	    }else{
+		wprintw(t_bar, "%s", websites[i]);
+		waddch(t_bar, ' ');
+	    }
 	}
-	i == 0 ? : waddch(t_bar, '|'); /* if no websites opened, do not print | */
+	i == 0 ? : waddstr(t_bar, "|"); /* if no websites opened, do not print | */
 	wrefresh(t_bar);
 } 
 
