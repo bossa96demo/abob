@@ -25,8 +25,9 @@ void open_prompt(){
 
 	/* if user doesn't enter anything programm will crash, prevent this */
 	if(strlen(all) == 0) 
-	    curs_set(0); noecho(); return; /* turn off prompt if there are 0 commands */
+	{curs_set(0); noecho(); return;} /* turn off prompt if there are 0 commands */
 
+	
 	char *content = get_thing_after_space(all);	/* get text after command */
 	char *cmd = strtok(all, " ");			/* get user command */
 	
@@ -38,7 +39,7 @@ void open_prompt(){
 	}else if(strcmp(cmd, "q") == 0){		/* on q we quit the programm */
 		exit(0);
 	}else if(strcmp(cmd, "help") == 0){		/* display start page on help */
-		open_start();				/* should be changes later */
+		open_start();				/* should be changed later */
 	}else{
 		show_error("Error! Command not found");
 	}
